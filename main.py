@@ -10,9 +10,11 @@ from config.config import config
 from logs import logger
 from presentation.observer import Observable
 
+import requests
+
 DATA_SLICE_DAYS = 1
 DATETIME_FORMAT = "%Y-%m-%dT%H:%M"
-API_URL = 'https://production.api.coindesk.com/v2/price/values/DOGE?ohlc=false'
+API_URL = 'https://chain.so/api/v2/get_info/DOGE'
 
 
 def get_dummy_data():
@@ -23,15 +25,11 @@ def get_dummy_data():
 
 def fetch_prices():
     logger.info('Fetching prices')
-    timeslot_end = datetime.now(timezone.utc)
-    end_date = timeslot_end.strftime(DATETIME_FORMAT)
-    start_data = (timeslot_end - timedelta(days=DATA_SLICE_DAYS)).strftime(DATETIME_FORMAT)
-    url = f'{API_URL}&start_date={start_data}&end_date={end_date}'
-    req = Request(url)
-    data = urlopen(req).read()
-    external_data = json.loads(data)
-    prices = [entry[1] for entry in external_data['data']['entries']]
-    return prices
+    response = requests.get('https://chain.so/api/v2/get_price/DOGE/USD')
+    if response.status_code == 200:
+        content = response.json()
+        prices = content['data']['prices'][0]['price']
+        return prices
 
 
 def main():
