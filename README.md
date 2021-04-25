@@ -1,5 +1,5 @@
 # Zero DOGE Screen
-Bitcoin stock price for your RPi Zero
+DOGE Coin price for your RPi Zero
 
 ![display](display.jpg)
 
