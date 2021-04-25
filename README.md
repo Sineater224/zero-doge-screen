@@ -23,7 +23,7 @@ DOGE Coin price for your RPi Zero
     for more information refer to: https://www.waveshare.com/wiki/2.13inch_e-Paper_HAT
 3. Download Zero DOGE Screen
     ```
-    git clone https://github.com/dr-mod/zero-doge-screen.git ~/zero-doge-screen
+    git clone https://github.com/Sineater224/zero-doge-screen.git ~/zero-doge-screen
     ```
 4. Run it 
     ```
