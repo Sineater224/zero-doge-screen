@@ -26,12 +26,12 @@ def get_dummy_data():
     return [random.randint(9999, 99000) for _ in range(0, 97)]
 
 
-def xfetch_prices():
+def fetch_prices():
     logger.info('Fetching prices')
-    response = requests.get('https://chain.so/api/v2/get_price/DOGE/USD')
+    response = requests.get('https://sineater-crypto-api.aman25ta.repl.co/api/doge')
     if response.status_code == 200:
         content = response.json()
-        prices = content['data']['prices'][0]['price']
+        prices = content['prices']
         return prices
 
 
@@ -58,29 +58,6 @@ def main():
         data_sink.close()
         exit()
 
-def fetch_prices():
-    item=db.search(Query().type=="dogecoin")
-    if len(item) == 0:
-        return item
-    else:    
-        return item[0]["prices"]
-
-class BackgroundTasks(threading.Thread):
-    def run(self,*args,**kwargs):
-        while True:
-            data = xfetch_prices()
-            item=db.search(Query().type=="dogecoin")
-            if len(item) == 0:
-                db.insert({"type":"dogecoin","prices":[data]})
-            else:
-                newlist=list(item[0]["prices"])
-                if len(newlist)==24:
-                    newlist.pop(0)
-                db.update({"prices":newlist.append(data)},Query().type=="dogecoin")
-            time.sleep(60*60)
-
-t = BackgroundTasks()
 
 if __name__ == "__main__":
-    t.start()
     main()
